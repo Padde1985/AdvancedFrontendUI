@@ -1,10 +1,14 @@
 ﻿#pragma once
 
-#include "CoreMinimal.h"
+#include "NativeGameplayTags.h"
 
-class ADVANCEDFRONTENDUI_API FronetendGameplayTags
+namespace FrontendGameplayTags
 {
-public:
-	FronetendGameplayTags();
-	~FronetendGameplayTags();
-};
+	ADVANCEDFRONTENDUI_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Frontend_WidgetStack_Modal);
+	ADVANCEDFRONTENDUI_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Frontend_WidgetStack_GameMenu);
+	ADVANCEDFRONTENDUI_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Frontend_WidgetStack_GameHud);
+	ADVANCEDFRONTENDUI_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Frontend_WidgetStack_Frontend);
+	
+	ADVANCEDFRONTENDUI_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Frontend_Widget_PressAnyKeyScreen);
+	ADVANCEDFRONTENDUI_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Frontend_Widget_MainMenu);
+}

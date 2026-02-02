@@ -41,6 +41,7 @@ void UAsyncAction_PushSoftWidget::Activate()
 			this->OnWidgetCreatedAfterPush.Broadcast(PushedWidget);
 			if (this->bCachedFocusOnNewlyPushedWidget)
 			{
+				// to set the focus target, we have to override the function GetDesiredFocus in the widget blueprint
 				if (UWidget* WidgetToFocus = PushedWidget->GetDesiredFocusTarget())
 				{
 					WidgetToFocus->SetFocus();

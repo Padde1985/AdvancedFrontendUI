@@ -1,7 +1,11 @@
 ﻿#include "Subsystems/FrontendUISubsystem.h"
+
+#include "FrontendFunctionLibrary.h"
+#include "FrontendGameplayTags.h"
 #include "Engine/AssetManager.h"
 #include "Widgets/CommonActivatableWidgetContainer.h"
 #include "Widgets/Widget_ActivatableBase.h"
+#include "Widgets/Widget_ConfirmationScreen.h"
 #include "Widgets/Widget_PrimaryLayout.h"
 
 UFrontendUISubsystem* UFrontendUISubsystem::Get(const UObject* WorldContextObject)
@@ -46,6 +50,38 @@ void UFrontendUISubsystem::PushSoftWidgetToStackAsync(const FGameplayTag& InWidg
 		});
 		AsyncPushCallback(EAsyncPushWidgetState::AfterPush, CreatedWidget);
 	}));
+}
+
+void UFrontendUISubsystem::PushConfirmScreenToModalStackAsync(EConfirmScreenType InScreenType, const FText& InScreenTitle, const FText& InScreenMessage, TFunction<void(EConfirmScreenButtonType)> ButtonClickedCallback)
+{
+	UConfirmScreenInfoObject* CreatedInfoObject = nullptr;
+	
+	switch (InScreenType)
+	{
+	case EConfirmScreenType::OK:
+		CreatedInfoObject = UConfirmScreenInfoObject::CreateOkScreen(InScreenTitle, InScreenMessage);
+		break;
+	case EConfirmScreenType::YesNo:
+		CreatedInfoObject = UConfirmScreenInfoObject::CreateYesNoScreen(InScreenTitle, InScreenMessage);
+		break;
+	case EConfirmScreenType::OkCancel:
+		CreatedInfoObject = UConfirmScreenInfoObject::CreateOkCancelScreen(InScreenTitle, InScreenMessage);
+		break;
+	case EConfirmScreenType::Unknown:
+		break;
+	}
+	
+	check(CreatedInfoObject);
+	
+	this->PushSoftWidgetToStackAsync(FrontendGameplayTags::Frontend_WidgetStack_Modal, UFrontendFunctionLibrary::GetFrontendSoftWidgetClassByTag(FrontendGameplayTags::Frontend_Widget_ConfirmScreen),
+	[CreatedInfoObject, ButtonClickedCallback](EAsyncPushWidgetState InState, UWidget_ActivatableBase* InWidget)
+	{
+		if (InState == EAsyncPushWidgetState::OnCreatedBeforePush)
+		{
+			UWidget_ConfirmationScreen* CreatedConfirmScreen = CastChecked<UWidget_ConfirmationScreen>(InWidget);
+			CreatedConfirmScreen->InitConfirmScreen(CreatedInfoObject, ButtonClickedCallback);
+		}
+	});
 }
 
 void UFrontendUISubsystem::RegisterPrimaryLayoutWidget(UWidget_PrimaryLayout* InCreatedWidget)

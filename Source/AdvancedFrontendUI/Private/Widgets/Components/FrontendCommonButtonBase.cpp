@@ -11,6 +11,13 @@ void UFrontendCommonButtonBase::SetButtonText(FText InText)
 	}
 }
 
+FText UFrontendCommonButtonBase::GetButtonDisplayText() const
+{
+	if (this->CommonTextBlock_ButtonText) return this->CommonTextBlock_ButtonText->GetText();
+	
+	return FText();
+}
+
 void UFrontendCommonButtonBase::NativePreConstruct()
 {
 	Super::NativePreConstruct();

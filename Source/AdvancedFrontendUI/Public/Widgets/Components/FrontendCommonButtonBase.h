@@ -13,6 +13,7 @@ class ADVANCEDFRONTENDUI_API UFrontendCommonButtonBase : public UCommonButtonBas
 	
 public:
 	UFUNCTION(BlueprintCallable) void SetButtonText(FText InText);
+	UFUNCTION(BlueprintCallable) FText GetButtonDisplayText() const;
 	
 private:
 	UPROPERTY(meta = (BindWidgetOptional)) UCommonTextBlock* CommonTextBlock_ButtonText;

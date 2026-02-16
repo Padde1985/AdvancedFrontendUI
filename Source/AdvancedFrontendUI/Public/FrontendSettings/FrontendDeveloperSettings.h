@@ -14,4 +14,5 @@ class ADVANCEDFRONTENDUI_API UFrontendDeveloperSettings : public UDeveloperSetti
 	
 public:
 	UPROPERTY(Config, EditAnywhere, Category="Widget Reference", meta = (Categories = "Frontend.Widget")) TMap<FGameplayTag,TSoftClassPtr<UWidget_ActivatableBase>> FrontendWidgetMap;
+	UPROPERTY(Config, EditAnywhere, Category="Options Image Reference", meta = (Categories = "Frontend.Image")) TMap<FGameplayTag, TSoftObjectPtr<UTexture2D>> OptionsScreenSoftImageMap;
 };

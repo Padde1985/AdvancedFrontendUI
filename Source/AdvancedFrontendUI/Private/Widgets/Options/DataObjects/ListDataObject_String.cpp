@@ -145,3 +145,21 @@ bool UListDataObject_String::TryResetBackToDefaultValue()
 	
 	return false;
 }
+
+bool UListDataObject_String::CanSetToForcedStringValue(const FString& InForcedValue) const
+{
+	return this->CurrentStringValue != InForcedValue;
+}
+
+void UListDataObject_String::OnSetToForcedStringValue(const FString& InForcedValue)
+{
+	this->CurrentStringValue = InForcedValue;
+	this->TrySetDisplayTextFromStringValue(this->CurrentStringValue);
+	
+	if (DataDynamicSetter)
+	{
+		DataDynamicSetter->SetValueFromString(this->CurrentStringValue);
+		
+		NotifyListDataModified(this, EOptionsListDataModifyReason::DependencyModified);
+	}
+}

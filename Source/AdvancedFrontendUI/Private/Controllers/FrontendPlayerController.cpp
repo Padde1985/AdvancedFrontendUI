@@ -2,6 +2,7 @@
 #include "Blueprint/UserWidget.h"
 #include "Kismet/GameplayStatics.h"
 #include "Camera/CameraActor.h"
+#include "FrontendSettings/FrontendGameUserSettings.h"
 #include "Subsystems/FrontendUISubsystem.h"
 #include "Widgets/Widget_PrimaryLayout.h"
 
@@ -21,6 +22,13 @@ void AFrontendPlayerController::BeginPlayingState()
 	}
 	// calls the Blueprint event
 	this->BeginPlayingStateBP();
+	
+	UFrontendGameUserSettings* GameUserSettings = UFrontendGameUserSettings::Get();
+	if (GameUserSettings->GetLastCPUBenchmarkResult() == -1.f || GameUserSettings->GetLastGPUBenchmarkResult() == -1.f)
+	{
+		GameUserSettings->RunHardwareBenchmark();
+		GameUserSettings->ApplyHardwareBenchmarkResults();
+	}
 }
 
 void AFrontendPlayerController::OnPossess(APawn* aPawn)

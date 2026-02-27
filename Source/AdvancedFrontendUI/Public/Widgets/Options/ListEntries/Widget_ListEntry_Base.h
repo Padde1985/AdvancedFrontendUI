@@ -26,9 +26,12 @@ protected:
 	void SelectThisEntryWidget();
 	virtual FReply NativeOnFocusReceived(const FGeometry& InGeometry, const FFocusEvent& InFocusEvent) override;
 	virtual void NativeOnEntryReleased() override;
+	virtual void OnToggleEditableState(bool bIsEditable);
+	virtual void OnOwningDependencyDataObjectModified(UListDataObject_Base* OwningModifiedDependecyData, EOptionsListDataModifyReason ModifyReason);
 	
 	UFUNCTION(BlueprintImplementableEvent, meta=(DisplayName = "Get Widget To Focus For Gamepad")) UWidget* BP_GetWidgetToFocusForGamepad() const;
 	
 private:
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidgetOptional, AllowPrivateAccess = "true")) UCommonTextBlock* CommonText_SettingDisplayName;
+	UPROPERTY(Transient) UListDataObject_Base* CachedOwningDataObject;
 };

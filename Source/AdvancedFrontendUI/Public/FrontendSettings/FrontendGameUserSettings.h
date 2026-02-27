@@ -27,6 +27,8 @@ public:
 	UFUNCTION() void SetAllowBackgroundAudio(const bool InAllowBackgroundAudio);
 	UFUNCTION() bool GetUseHDRAudio() const;
 	UFUNCTION() void SetUseHDRAudio(const bool InUseHDRAudio);
+	UFUNCTION() float GetCurrentDisplayGamma() const;
+	UFUNCTION() void SetCurrentDisplayGamma(const float InCurrentDisplayGamma);
 	
 private:
 	UPROPERTY(Config) FString CurrentGameDifficulty;

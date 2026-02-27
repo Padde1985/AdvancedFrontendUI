@@ -1,5 +1,4 @@
 ﻿#include "Widgets/Options/DataObjects/ListDataObject_Scalar.h"
-
 #include "Widgets/Options/OptionsDataInteractionHelper.h"
 
 TRange<float> UListDataObject_Scalar::GetDisplayValueRange() const
@@ -124,4 +123,11 @@ bool UListDataObject_Scalar::TryResetBackToDefaultValue()
 		}
 	}
 	return false;
+}
+
+void UListDataObject_Scalar::OnEditDependecyDataModified(UListDataObject_Base* ModifiedDependencyData, EOptionsListDataModifyReason ModifyReason)
+{
+	NotifyListDataModified(this, EOptionsListDataModifyReason::DependencyModified);
+	
+	Super::OnEditDependecyDataModified(ModifiedDependencyData, ModifyReason);
 }

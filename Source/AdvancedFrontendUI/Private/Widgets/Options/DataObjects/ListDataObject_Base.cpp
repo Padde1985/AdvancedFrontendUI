@@ -87,6 +87,44 @@ bool UListDataObject_Base::TryResetBackToDefaultValue()
 	return false;
 }
 
+void UListDataObject_Base::AddEditCondition(const FOptionsDataEditConditionDescriptor& InEditCondition)
+{
+	this->EditConditionDescArray.Add(InEditCondition);
+}
+
+bool UListDataObject_Base::IsDataCurrentlyEditable()
+{
+	bool bIsEditable = true;
+	
+	if (this->EditConditionDescArray.IsEmpty()) return bIsEditable;
+	
+	FString CachedDisabledReason;
+	for (const FOptionsDataEditConditionDescriptor& Condition : this->EditConditionDescArray)
+	{
+		if (!Condition.IsValid() || Condition.IsEditConditionMet()) continue;
+		
+		bIsEditable = false;
+		
+		CachedDisabledReason.Append(Condition.GetDisabledRichReason());
+		
+		this->SetDisabledRichText(FText::FromString(CachedDisabledReason));
+		
+		if (Condition.HasForcedStringValue())
+		{
+			const FString ForcedStringValue = Condition.GetDisabledForcedStringValue();
+			
+			if (this->CanSetToForcedStringValue(ForcedStringValue)) this->OnSetToForcedStringValue(ForcedStringValue);
+		}
+	}
+	
+	return bIsEditable;
+}
+
+void UListDataObject_Base::AddEditDependencyData(UListDataObject_Base* InEditDependencyData)
+{
+	if (!InEditDependencyData->OnListDataModified.IsBoundToObject(this)) InEditDependencyData->OnListDataModified.AddUObject(this, &ThisClass::OnEditDependecyDataModified);
+}
+
 void UListDataObject_Base::OnDataObjectInitialized()
 {
 }
@@ -95,10 +133,21 @@ void UListDataObject_Base::NotifyListDataModified(UListDataObject_Base* Modified
 {
 	this->OnListDataModified.Broadcast(ModifiedData, ModifyReason);
 	
-	if (this->bShouldApplayChangeImmediately)
-	{
-		UFrontendGameUserSettings::Get()->ApplySettings(true);
-	}
+	if (this->bShouldApplayChangeImmediately) UFrontendGameUserSettings::Get()->ApplySettings(true);
+}
+
+bool UListDataObject_Base::CanSetToForcedStringValue(const FString& InForcedValue) const
+{
+	return false;
+}
+
+void UListDataObject_Base::OnSetToForcedStringValue(const FString& InForcedValue)
+{
+}
+
+void UListDataObject_Base::OnEditDependecyDataModified(UListDataObject_Base* ModifiedDependencyData, EOptionsListDataModifyReason ModifyReason)
+{
+	this->OnDependencyDataModified.Broadcast(ModifiedDependencyData, ModifyReason);
 }
 
 UListDataObject_Base* UListDataObject_Base::GetParentData() const

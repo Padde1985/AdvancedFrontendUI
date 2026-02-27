@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "UObject/Object.h"
 #include "FrontendTypes/FrontendEnumTypes.h"
+#include "FrontendTypes/FrontendStructTypes.h"
 #include "ListDataObject_Base.generated.h"
 
 class UListDataObject_Base;
@@ -16,6 +17,7 @@ class ADVANCEDFRONTENDUI_API UListDataObject_Base : public UObject
 	
 public:
 	FOnListDataModifiedDelegate OnListDataModified;
+	FOnListDataModifiedDelegate OnDependencyDataModified;
 	
 	FName GetDataID() const;
 	void SetDataID(const FName InDataID);
@@ -36,10 +38,16 @@ public:
 	virtual bool HasDefaultValue() const;
 	virtual bool CanResetBackToDefaultValue() const;
 	virtual bool TryResetBackToDefaultValue();
+	void AddEditCondition(const FOptionsDataEditConditionDescriptor& InEditCondition);
+	bool IsDataCurrentlyEditable();
+	void AddEditDependencyData(UListDataObject_Base* InEditDependencyData);
 	
 protected:
 	virtual void OnDataObjectInitialized();
 	virtual void NotifyListDataModified(UListDataObject_Base* ModifiedData, EOptionsListDataModifyReason ModifyReason = EOptionsListDataModifyReason::DirectlyModified);
+	virtual bool CanSetToForcedStringValue(const FString& InForcedValue) const;
+	virtual void OnSetToForcedStringValue(const FString& InForcedValue);
+	virtual void OnEditDependecyDataModified(UListDataObject_Base* ModifiedDependencyData, EOptionsListDataModifyReason ModifyReason = EOptionsListDataModifyReason::DirectlyModified);
 
 private:
 	FName DataID;
@@ -50,4 +58,5 @@ private:
 	bool bShouldApplayChangeImmediately = false;
 
 	UPROPERTY(Transient) UListDataObject_Base* ParentData;
+	UPROPERTY(Transient) TArray<FOptionsDataEditConditionDescriptor> EditConditionDescArray;
 };

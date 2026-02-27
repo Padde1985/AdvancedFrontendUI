@@ -17,6 +17,7 @@ protected:
 	virtual void OnOwningListDataObjectSet(UListDataObject_Base* InOwningListDataObject) override;
 	virtual void NativeOnInitialized() override;
 	virtual void OnOwningListDataObjectModified(UListDataObject_Base* OwningModifiedData, EOptionsListDataModifyReason ModifyReason) override;
+	virtual void OnToggleEditableState(bool bIsEditable) override;
 	
 private:
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget, AllowPrivateAccess = "true")) UFrontendCommonButtonBase* CommonButton_PreviousOption;

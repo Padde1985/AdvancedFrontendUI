@@ -95,3 +95,15 @@ void UFrontendGameUserSettings::SetUseHDRAudio(const bool InUseHDRAudio)
 {
 	this->bUseHDRAudio = InUseHDRAudio;
 }
+
+float UFrontendGameUserSettings::GetCurrentDisplayGamma() const
+{
+	if (GEngine) return GEngine->GetDisplayGamma();
+	
+	return 0.f;
+}
+
+void UFrontendGameUserSettings::SetCurrentDisplayGamma(const float InCurrentDisplayGamma)
+{
+	if (GEngine) GEngine->DisplayGamma = InCurrentDisplayGamma;
+}

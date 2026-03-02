@@ -8,6 +8,15 @@
 void UWidget_ListEntry_Base::NativeOnListEntryWidgetHovered(bool bWasHovered)
 {
 	this->BP_OnListEntryWidgetHovered(bWasHovered, GetListItem() ? IsListItemSelected() : false);
+	
+	if (bWasHovered)
+	{
+		this->BP_OnToggleEntryWidgetHighlightState(true);
+	}
+	else
+	{
+		this->BP_OnToggleEntryWidgetHighlightState(GetListItem() && IsListItemSelected() ? true : false);
+	}
 }
 
 // will be called any time the object is displayed on the screen
@@ -71,4 +80,11 @@ void UWidget_ListEntry_Base::OnToggleEditableState(bool bIsEditable)
 void UWidget_ListEntry_Base::OnOwningDependencyDataObjectModified(UListDataObject_Base* OwningModifiedDependecyData, EOptionsListDataModifyReason ModifyReason)
 {
 	if (this->CachedOwningDataObject) this->OnToggleEditableState(this->CachedOwningDataObject->IsDataCurrentlyEditable());
+}
+
+void UWidget_ListEntry_Base::NativeOnItemSelectionChanged(bool bIsSelected)
+{
+	IUserObjectListEntry::NativeOnItemSelectionChanged(bIsSelected);
+	
+	this->BP_OnToggleEntryWidgetHighlightState(bIsSelected);
 }

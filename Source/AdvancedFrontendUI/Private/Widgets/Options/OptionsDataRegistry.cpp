@@ -1,11 +1,13 @@
 ﻿#include "Widgets/Options/OptionsDataRegistry.h"
-
+#include "EnhancedInputSubsystems.h"
 #include "FrontendFunctionLibrary.h"
 #include "FrontendGameplayTags.h"
 #include "FrontendSettings/FrontendGameUserSettings.h"
 #include "Internationalization/StringTableRegistry.h"
+#include "UserSettings/EnhancedInputUserSettings.h"
 #include "Widgets/Options/OptionsDataInteractionHelper.h"
 #include "Widgets/Options/DataObjects/ListDataObject_Collection.h"
+#include "Widgets/Options/DataObjects/ListDataObject_KeyRemap.h"
 #include "Widgets/Options/DataObjects/ListDataObject_Scalar.h"
 #include "Widgets/Options/DataObjects/ListDataObject_String.h"
 #include "Widgets/Options/DataObjects/ListDataObject_StringBool.h"
@@ -27,7 +29,7 @@ void UOptionsDataRegistry::InitOptionsDataRegistry(ULocalPlayer* InOwningLocalPl
 	this->InitGameplayCollectionTab();
 	this->InitAudioCollectionTab();
 	this->InitVideoCollectionTab();
-	this->InitControllsCollectionTab();
+	this->InitControllsCollectionTab(InOwningLocalPlayer);
 }
 
 const TArray<UListDataObject_Collection*>& UOptionsDataRegistry::GetRegisteredOptionsTabCollection() const
@@ -547,11 +549,88 @@ void UOptionsDataRegistry::InitVideoCollectionTab()
 	this->RegisteredOptionsTabCollection.Add(VideoTabCollection);
 }
 
-void UOptionsDataRegistry::InitControllsCollectionTab()
+void UOptionsDataRegistry::InitControllsCollectionTab(ULocalPlayer* InOwningLocalPlayer)
 {
 	UListDataObject_Collection* ControllsTabCollection = NewObject<UListDataObject_Collection>();
 	ControllsTabCollection->SetDataID(FName("ControllsTabCollection"));
 	ControllsTabCollection->SetDataDisplayName(FText::FromString(TEXT("Controlls")));
+	
+	// Keyboard and mouse category
+	UListDataObject_Collection* KeyboardMouseCategoryCollection = NewObject<UListDataObject_Collection>();
+	KeyboardMouseCategoryCollection->SetDataID(FName("KeyboardMouseCategoryCollection"));
+	KeyboardMouseCategoryCollection->SetDataDisplayName(FText::FromString(TEXT("Keyboard and Mouse")));
+	
+	UEnhancedInputLocalPlayerSubsystem* EISubsystem = InOwningLocalPlayer->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>();
+	check(EISubsystem);
+	
+	UEnhancedInputUserSettings* EIUserSettings = EISubsystem->GetUserSettings();
+	check(EIUserSettings);
+	
+	// only query keybaord and mouse interaction, Gamepad options will be ignored
+	FPlayerMappableKeyQueryOptions KeyBoardMouseOnly;
+	KeyBoardMouseOnly.KeyToMatch = EKeys::S; // any key can be used to activate the whole category
+	KeyBoardMouseOnly.bMatchBasicKeyTypes = true;
+	
+	// FString = name of key mapping setting, ObjectPtr = the actual profile 
+	for (const TPair<FString, TObjectPtr<UEnhancedPlayerMappableKeyProfile>>& ProfilePair : EIUserSettings->GetAllAvailableKeyProfiles())
+	{
+		UEnhancedPlayerMappableKeyProfile* MappableKeyProfile = ProfilePair.Value;
+		check(MappableKeyProfile);
+		
+		// FName = the ID_* of the input action, MappingRow = the actual mappings per action
+		for (const TPair<FName, FKeyMappingRow>& MappingRowPair : MappableKeyProfile->GetPlayerMappingRows())
+		{
+			for (const FPlayerKeyMapping& KeyMapping : MappingRowPair.Value.Mappings)
+			{
+				if (MappableKeyProfile->DoesMappingPassQueryOptions(KeyMapping, KeyBoardMouseOnly))
+				{
+					UListDataObject_KeyRemap* KeyRemapDataObject = NewObject<UListDataObject_KeyRemap>();
+					KeyRemapDataObject->SetDataID(KeyMapping.GetMappingName());
+					KeyRemapDataObject->SetDataDisplayName(KeyMapping.GetDisplayName());
+					KeyRemapDataObject->InitKeyRemapData(EIUserSettings, MappableKeyProfile, ECommonInputType::MouseAndKeyboard, KeyMapping);
+					
+					KeyboardMouseCategoryCollection->AddChildListData(KeyRemapDataObject);
+				}
+			}
+		}
+	}
+	
+	ControllsTabCollection->AddChildListData(KeyboardMouseCategoryCollection);
+	
+	// Gamepad category
+	UListDataObject_Collection* GamepadCollection = NewObject<UListDataObject_Collection>();
+	GamepadCollection->SetDataID(FName("GamepadCollection"));
+	GamepadCollection->SetDataDisplayName(FText::FromString(TEXT("Gamepad")));
+	
+	// only query Gamepad interaction, keybaord and mouse options will be ignored
+	FPlayerMappableKeyQueryOptions GempadOnly;
+	GempadOnly.KeyToMatch = EKeys::Gamepad_FaceButton_Bottom; // any key can be used to activate the whole category
+	GempadOnly.bMatchBasicKeyTypes = true;
+	
+	for (const TPair<FString, TObjectPtr<UEnhancedPlayerMappableKeyProfile>>& ProfilePair : EIUserSettings->GetAllAvailableKeyProfiles())
+	{
+		UEnhancedPlayerMappableKeyProfile* MappableKeyProfile = ProfilePair.Value;
+		check(MappableKeyProfile);
+		
+		// FName = the ID_* of the input action, MappingRow = the actual mappings per action
+		for (const TPair<FName, FKeyMappingRow>& MappingRowPair : MappableKeyProfile->GetPlayerMappingRows())
+		{
+			for (const FPlayerKeyMapping& KeyMapping : MappingRowPair.Value.Mappings)
+			{
+				if (MappableKeyProfile->DoesMappingPassQueryOptions(KeyMapping, GempadOnly))
+				{
+					UListDataObject_KeyRemap* KeyRemapDataObject = NewObject<UListDataObject_KeyRemap>();
+					KeyRemapDataObject->SetDataID(KeyMapping.GetMappingName());
+					KeyRemapDataObject->SetDataDisplayName(KeyMapping.GetDisplayName());
+					KeyRemapDataObject->InitKeyRemapData(EIUserSettings, MappableKeyProfile, ECommonInputType::Gamepad, KeyMapping);
+					
+					GamepadCollection->AddChildListData(KeyRemapDataObject);
+				}
+			}
+		}
+	}
+	
+	ControllsTabCollection->AddChildListData(GamepadCollection);
 	
 	this->RegisteredOptionsTabCollection.Add(ControllsTabCollection);
 }

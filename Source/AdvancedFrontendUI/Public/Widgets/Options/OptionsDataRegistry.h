@@ -23,6 +23,6 @@ private:
 	void InitGameplayCollectionTab();
 	void InitAudioCollectionTab();
 	void InitVideoCollectionTab();
-	void InitControllsCollectionTab();
+	void InitControllsCollectionTab(ULocalPlayer* InOwningLocalPlayer);
 	void FindChildListDataRecursively(const UListDataObject_Base* InParentData, TArray<UListDataObject_Base*>& OutFoundChildListData) const;
 };

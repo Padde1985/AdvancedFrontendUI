@@ -40,6 +40,9 @@ class ADVANCEDFRONTENDUI_API UWidget_ConfirmationScreen : public UWidget_Activat
 public:
 	void InitConfirmScreen(UConfirmScreenInfoObject* InScreenInfoObject, TFunction<void(EConfirmScreenButtonType)> ClickedButtonCallback);
 	
+protected:
+	virtual UWidget* NativeGetDesiredFocusTarget() const override;
+	
 private:
 	UPROPERTY(meta=(BindWidget)) UCommonTextBlock* CommonTextBlock_Title;
 	UPROPERTY(meta=(BindWidget)) UCommonTextBlock* CommonTextBlock_Message;

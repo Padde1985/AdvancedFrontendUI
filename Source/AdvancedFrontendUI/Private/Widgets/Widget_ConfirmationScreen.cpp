@@ -103,6 +103,11 @@ void UWidget_ConfirmationScreen::InitConfirmScreen(UConfirmScreenInfoObject* InS
 			DeactivateWidget();
 		});
 	}
-	
+}
+
+UWidget* UWidget_ConfirmationScreen::NativeGetDesiredFocusTarget() const
+{
 	if (this->DynamicEntryBox_Buttons->GetNumEntries() != 0) this->DynamicEntryBox_Buttons->GetAllEntries().Last()->SetFocus();
+	
+	return Super::NativeGetDesiredFocusTarget();
 }

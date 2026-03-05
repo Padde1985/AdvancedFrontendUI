@@ -14,17 +14,7 @@ void AFrontendPlayerController::BeginPlayingState()
 {
 	if (!IsLocalController()) return;
 	
-	if (UWidget_PrimaryLayout* PrimaryLayoutWidget = CreateWidget<UWidget_PrimaryLayout>(this, this->PrimaryLayoutWidgetClass))
-	{
-		PrimaryLayoutWidget->AddToViewport();
-		
-		if (UFrontendUISubsystem* Subsystem = UFrontendUISubsystem::Get(this))
-		{
-			Subsystem->RegisterPrimaryLayoutWidget(PrimaryLayoutWidget);
-		}
-	}
-	// calls the Blueprint event
-	this->BeginPlayingStateBP();
+	if (this->bIsLoadFinsihed) this->InitializeWidget();
 	
 	UFrontendGameUserSettings* GameUserSettings = UFrontendGameUserSettings::Get();
 	if (GameUserSettings->GetLastCPUBenchmarkResult() == -1.f || GameUserSettings->GetLastGPUBenchmarkResult() == -1.f)
@@ -50,4 +40,19 @@ void AFrontendPlayerController::OnPossess(APawn* aPawn)
 	{
 		SetViewTarget(FoundCameras[0]);
 	}
+}
+
+void AFrontendPlayerController::InitializeWidget()
+{	
+	if (UWidget_PrimaryLayout* PrimaryLayoutWidget = CreateWidget<UWidget_PrimaryLayout>(this, this->PrimaryLayoutWidgetClass))
+	{
+		PrimaryLayoutWidget->AddToViewport();
+		
+		if (UFrontendUISubsystem* Subsystem = UFrontendUISubsystem::Get(this))
+		{
+			Subsystem->RegisterPrimaryLayoutWidget(PrimaryLayoutWidget);
+		}
+	}
+	// calls the Blueprint event
+	this->BeginPlayingStateBP();
 }

@@ -22,4 +22,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Input") TObjectPtr<UInputMappingContext> InputMappingContext;
 	
 	virtual void OnPossess(APawn* aPawn) override;
+
+	UFUNCTION(BlueprintCallable) void InitializeWidget();
+	
+private:
+	UPROPERTY(BlueprintReadWrite, meta=(AllowPrivateAccess=true)) bool bIsLoadFinsihed = false;
 };

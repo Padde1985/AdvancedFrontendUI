@@ -4,7 +4,8 @@
 #include "UObject/Interface.h"
 #include "FrontendLoadingScreenInterface.generated.h"
 
-// This class does not need to be modified.
+// This interface is assigned in the player controller to have the interface events available
+// it also gets checked in the loading screen subsystem
 UINTERFACE(BlueprintType)
 class UFrontendLoadingScreenInterface : public UInterface
 {

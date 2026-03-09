@@ -4,6 +4,7 @@
 #include "ListDataObject_Value.h"
 #include "ListDataObject_String.generated.h"
 
+// String representation (value with previous and next buttons) for a list object
 UCLASS()
 class ADVANCEDFRONTENDUI_API UListDataObject_String : public UListDataObject_Value
 {

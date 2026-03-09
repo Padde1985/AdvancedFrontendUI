@@ -7,6 +7,7 @@
 
 class UWidget_ActivatableBase;
 
+// helper class for widgets
 UCLASS()
 class ADVANCEDFRONTENDUI_API UFrontendFunctionLibrary : public UBlueprintFunctionLibrary
 {

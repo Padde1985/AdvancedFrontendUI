@@ -2,6 +2,7 @@
 #include "AnalogSlider.h"
 #include "Widgets/Options/DataObjects/ListDataObject_Scalar.h"
 
+// bind callbacks for moving the slider and/or changing the value directly
 void UWidget_ListEntry_Scalar::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
@@ -10,6 +11,7 @@ void UWidget_ListEntry_Scalar::NativeOnInitialized()
 	this->AnalogSlider_SettingSlider->OnMouseCaptureBegin.AddUniqueDynamic(this, &UWidget_ListEntry_Scalar::OnSliderMouseCaptureBegin);
 }
 
+// callback when the data object is set
 void UWidget_ListEntry_Scalar::OnOwningListDataObjectSet(UListDataObject_Base* InOwningListDataObject)
 {
 	Super::OnOwningListDataObjectSet(InOwningListDataObject);
@@ -26,6 +28,7 @@ void UWidget_ListEntry_Scalar::OnOwningListDataObjectSet(UListDataObject_Base* I
 	this->AnalogSlider_SettingSlider->SetValue(this->CachedOwningScalarDataObject->GetCurrentValue());
 }
 
+// callback when the data object gets changed
 void UWidget_ListEntry_Scalar::OnOwningListDataObjectModified(UListDataObject_Base* OwningModifiedData, EOptionsListDataModifyReason ModifyReason)
 {
 	if (this->CachedOwningScalarDataObject)
@@ -35,11 +38,13 @@ void UWidget_ListEntry_Scalar::OnOwningListDataObjectModified(UListDataObject_Ba
 	}
 }
 
+// callback when the slider value is typed in by the user
 void UWidget_ListEntry_Scalar::OnSliderValueChanged(float Value)
 {
 	if (this->CachedOwningScalarDataObject)	this->CachedOwningScalarDataObject->SetCurrentValueFromSlider(Value);
 }
 
+// callback when the slider handle is moved by the user
 void UWidget_ListEntry_Scalar::OnSliderMouseCaptureBegin()
 {
 	SelectThisEntryWidget();

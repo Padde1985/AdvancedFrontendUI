@@ -7,6 +7,7 @@
 
 class UCommonActivatableWidgetContainerBase;
 
+// create the primary layout class for the main screen
 UCLASS(Abstract, BlueprintType, meta=(DisableNativeTick))
 class ADVANCEDFRONTENDUI_API UWidget_PrimaryLayout : public UCommonUserWidget
 {

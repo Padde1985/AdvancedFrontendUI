@@ -1,5 +1,6 @@
 ﻿#include "FrontendGameplayTags.h"
 
+// definition of all needed GameplayTags
 namespace FrontendGameplayTags
 {
 	UE_DEFINE_GAMEPLAY_TAG(Frontend_WidgetStack_Modal, "Frontend.WidgetStack.Modal");

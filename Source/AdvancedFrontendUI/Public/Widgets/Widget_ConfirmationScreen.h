@@ -8,6 +8,7 @@
 class UDynamicEntryBox;
 class UCommonTextBlock;
 
+// helper structure for the confirmation screen layout
 USTRUCT(BlueprintType)
 struct FConfirmScreenButtonInfo
 {
@@ -17,6 +18,7 @@ struct FConfirmScreenButtonInfo
 	UPROPERTY(EditAnywhere, BlueprintReadWrite) FText ButtonTextToDisplay;
 };
 
+// data object for the confirmation screen
 UCLASS()
 class ADVANCEDFRONTENDUI_API UConfirmScreenInfoObject : public UObject
 {
@@ -32,6 +34,7 @@ public:
 	static UConfirmScreenInfoObject* CreateOkCancelScreen(const FText& InScreenTitle, const FText& InScreenMessage);
 };
 
+// user widget class for the confirmation screen
 UCLASS(Abstract, BlueprintType, meta=(DisableNativeTick))
 class ADVANCEDFRONTENDUI_API UWidget_ConfirmationScreen : public UWidget_ActivatableBase
 {

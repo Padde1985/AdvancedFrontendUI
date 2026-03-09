@@ -7,6 +7,7 @@
 class UListDataObject_KeyRemap;
 class UFrontendCommonButtonBase;
 
+// visual representation of the key bindings
 UCLASS(Abstract, BlueprintType, meta=(DisableNativeTick))
 class ADVANCEDFRONTENDUI_API UWidget_ListEntry_KeyRemap : public UWidget_ListEntry_Base
 {

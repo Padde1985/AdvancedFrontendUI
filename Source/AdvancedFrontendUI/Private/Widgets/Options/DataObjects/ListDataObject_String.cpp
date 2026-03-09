@@ -1,24 +1,26 @@
 ﻿#include "Widgets/Options/DataObjects/ListDataObject_String.h"
-
-#include "FrontendDebugHelper.h"
 #include "Widgets/Options/OptionsDataInteractionHelper.h"
 
+// adds an option to the selectable list (fill both arrays)
 void UListDataObject_String::AddDynamicOption(const FString& InStringValue, const FText& InDisplayText)
 {
 	this->AvailableOptionsStringArray.Add(InStringValue);
 	this->AvailableOptionsTextArray.Add(InDisplayText);
 }
 
+// return the whole array of available Texts (the String is only a mapping object)
 const TArray<FText>& UListDataObject_String::GetAvailableOptionsTextArray() const
 {
 	return this->AvailableOptionsTextArray;
 }
 
+// returns the current displayed Text value for the displayed String (the text is the value shown in the rotator)
 FText UListDataObject_String::GetCurrentDisplayText() const
 {
 	return this->CurrentDisplayText;
 }
 
+// scroll forward through the list, start at first element when end of options list reached
 void UListDataObject_String::AdvanceToNextOption()
 {
 	if (this->AvailableOptionsStringArray.IsEmpty() || this->AvailableOptionsTextArray.IsEmpty()) return;
@@ -45,6 +47,7 @@ void UListDataObject_String::AdvanceToNextOption()
 	}
 }
 
+// scroll backward through the options list, start at the end when reaching the first item
 void UListDataObject_String::BackToPreviousOption()
 {
 	if (this->AvailableOptionsStringArray.IsEmpty() || this->AvailableOptionsTextArray.IsEmpty()) return;
@@ -93,6 +96,7 @@ void UListDataObject_String::OnRotatorInitiatedValueChange(const FText& InNewSel
 	}
 }
 
+// callback when object is initialized, sets default values
 void UListDataObject_String::OnDataObjectInitialized()
 {
 	if (!this->AvailableOptionsStringArray.IsEmpty()) this->CurrentStringValue = this->AvailableOptionsStringArray[0];
@@ -107,6 +111,7 @@ void UListDataObject_String::OnDataObjectInitialized()
 	if (!this->TrySetDisplayTextFromStringValue(this->CurrentStringValue)) this->CurrentDisplayText = FText::FromString(TEXT("Invalid Option"));
 }
 
+// update the display text from the given String
 bool UListDataObject_String::TrySetDisplayTextFromStringValue(const FString& InStringValue)
 {
 	const int32 CurrentFoundIndex = this->AvailableOptionsStringArray.IndexOfByKey(InStringValue);
@@ -121,11 +126,13 @@ bool UListDataObject_String::TrySetDisplayTextFromStringValue(const FString& InS
 	return false;
 }
 
+// check if the option can be reset to the default value (not all parameters have a default value)
 bool UListDataObject_String::CanResetBackToDefaultValue() const
 {
 	return this->HasDefaultValue() && this->CurrentStringValue != GetDefaultValueAsString();
 }
 
+// reset back to default and broadcast the delegate
 bool UListDataObject_String::TryResetBackToDefaultValue()
 {
 	if (this->CanResetBackToDefaultValue())
@@ -146,11 +153,13 @@ bool UListDataObject_String::TryResetBackToDefaultValue()
 	return false;
 }
 
+// check if the current value is different to the forced value
 bool UListDataObject_String::CanSetToForcedStringValue(const FString& InForcedValue) const
 {
 	return this->CurrentStringValue != InForcedValue;
 }
 
+// callback when the value gets forced overriden
 void UListDataObject_String::OnSetToForcedStringValue(const FString& InForcedValue)
 {
 	this->CurrentStringValue = InForcedValue;

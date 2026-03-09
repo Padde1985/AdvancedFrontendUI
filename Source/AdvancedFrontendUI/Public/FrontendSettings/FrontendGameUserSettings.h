@@ -4,7 +4,8 @@
 #include "GameFramework/GameUserSettings.h"
 #include "FrontendGameUserSettings.generated.h"
 
-// is set in project settings under GameUserSettings
+// is set in project settings under GameUserSettings, does not create a seperate category
+// this cclass only saves the user settings and applies them when starting the game
 UCLASS()
 class ADVANCEDFRONTENDUI_API UFrontendGameUserSettings : public UGameUserSettings
 {

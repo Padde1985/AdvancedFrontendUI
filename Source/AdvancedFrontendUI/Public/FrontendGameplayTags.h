@@ -2,6 +2,7 @@
 
 #include "NativeGameplayTags.h"
 
+// Gameplay tag generation
 namespace FrontendGameplayTags
 {
 	ADVANCEDFRONTENDUI_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Frontend_WidgetStack_Modal);

@@ -7,6 +7,7 @@
 
 class UWidget_PrimaryLayout;
 
+// Player Controller class, connects the user inputs with the game logic
 UCLASS(PrioritizeCategories=("FrontendUI", "Input"))
 class ADVANCEDFRONTENDUI_API AFrontendPlayerController : public APlayerController
 {

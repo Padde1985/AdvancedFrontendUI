@@ -9,6 +9,7 @@ class UWidget_ActivatableBase;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPushSoftWidgetDelegate, UWidget_ActivatableBase*, PushedWidget);
 
+// This class pushes each widget to the stack 
 UCLASS()
 class ADVANCEDFRONTENDUI_API UAsyncAction_PushSoftWidget : public UBlueprintAsyncActionBase
 {

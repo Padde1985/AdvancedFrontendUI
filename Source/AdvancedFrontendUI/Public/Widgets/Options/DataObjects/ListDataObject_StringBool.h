@@ -4,6 +4,7 @@
 #include "ListDataObject_String.h"
 #include "ListDataObject_StringBool.generated.h"
 
+// String representation of a True/False value, alternative to a checkbox
 UCLASS()
 class ADVANCEDFRONTENDUI_API UListDataObject_StringBool : public UListDataObject_String
 {

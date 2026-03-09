@@ -4,6 +4,7 @@
 #include "ListDataObject_String.h"
 #include "ListDataObject_StringResolution.generated.h"
 
+// special representation for Screen resolutions
 UCLASS()
 class ADVANCEDFRONTENDUI_API UListDataObject_StringResolution : public UListDataObject_String
 {

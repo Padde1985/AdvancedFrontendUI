@@ -1,10 +1,10 @@
 ﻿#include "Widgets/Widget_ConfirmationScreen.h"
-
 #include "CommonTextBlock.h"
 #include "ICommonInputModule.h"
 #include "Components/DynamicEntryBox.h"
 #include "Widgets/Components/FrontendCommonButtonBase.h"
 
+// create a popup with only one button
 UConfirmScreenInfoObject* UConfirmScreenInfoObject::CreateOkScreen(const FText& InScreenTitle, const FText& InScreenMessage)
 {
 	UConfirmScreenInfoObject* InfoObject = NewObject<UConfirmScreenInfoObject>();
@@ -20,6 +20,7 @@ UConfirmScreenInfoObject* UConfirmScreenInfoObject::CreateOkScreen(const FText& 
 	return InfoObject;
 }
 
+// create a popup with Yes and No buttons
 UConfirmScreenInfoObject* UConfirmScreenInfoObject::CreateYesNoScreen(const FText& InScreenTitle, const FText& InScreenMessage)
 {
 	UConfirmScreenInfoObject* InfoObject = NewObject<UConfirmScreenInfoObject>();
@@ -39,6 +40,7 @@ UConfirmScreenInfoObject* UConfirmScreenInfoObject::CreateYesNoScreen(const FTex
 	return InfoObject;
 }
 
+// create a popup with OK and cancel buttons
 UConfirmScreenInfoObject* UConfirmScreenInfoObject::CreateOkCancelScreen(const FText& InScreenTitle, const FText& InScreenMessage)
 {
 	UConfirmScreenInfoObject* InfoObject = NewObject<UConfirmScreenInfoObject>();
@@ -58,6 +60,7 @@ UConfirmScreenInfoObject* UConfirmScreenInfoObject::CreateOkCancelScreen(const F
 	return InfoObject;
 }
 
+// create the widget on screen
 void UWidget_ConfirmationScreen::InitConfirmScreen(UConfirmScreenInfoObject* InScreenInfoObject, TFunction<void(EConfirmScreenButtonType)> ClickedButtonCallback)
 {
 	check(InScreenInfoObject && this->CommonTextBlock_Title && this->CommonTextBlock_Message && this->DynamicEntryBox_Buttons);
@@ -105,6 +108,7 @@ void UWidget_ConfirmationScreen::InitConfirmScreen(UConfirmScreenInfoObject* InS
 	}
 }
 
+// gamepad logic to set the focus on the created popup
 UWidget* UWidget_ConfirmationScreen::NativeGetDesiredFocusTarget() const
 {
 	if (this->DynamicEntryBox_Buttons->GetNumEntries() != 0) this->DynamicEntryBox_Buttons->GetAllEntries().Last()->SetFocus();

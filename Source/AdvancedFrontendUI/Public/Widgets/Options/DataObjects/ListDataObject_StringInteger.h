@@ -4,6 +4,7 @@
 #include "ListDataObject_String.h"
 #include "ListDataObject_StringInteger.generated.h"
 
+// String representation for integer values, alternative to a text field
 UCLASS()
 class ADVANCEDFRONTENDUI_API UListDataObject_StringInteger : public UListDataObject_String
 {

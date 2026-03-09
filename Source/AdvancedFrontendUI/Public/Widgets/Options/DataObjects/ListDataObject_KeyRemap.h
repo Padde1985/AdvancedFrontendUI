@@ -9,6 +9,7 @@
 class UEnhancedPlayerMappableKeyProfile;
 class UEnhancedInputUserSettings;
 
+// class for key binding parameters
 UCLASS()
 class ADVANCEDFRONTENDUI_API UListDataObject_KeyRemap : public UListDataObject_Base
 {

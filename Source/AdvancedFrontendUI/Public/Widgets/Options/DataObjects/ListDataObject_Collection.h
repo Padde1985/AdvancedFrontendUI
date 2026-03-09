@@ -4,6 +4,7 @@
 #include "ListDataObject_Base.h"
 #include "ListDataObject_Collection.generated.h"
 
+// collection object (header for a set of parameters)
 UCLASS()
 class ADVANCEDFRONTENDUI_API UListDataObject_Collection : public UListDataObject_Base
 {

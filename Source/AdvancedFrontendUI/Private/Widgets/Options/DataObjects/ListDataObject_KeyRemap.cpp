@@ -1,9 +1,9 @@
 ﻿#include "Widgets/Options/DataObjects/ListDataObject_KeyRemap.h"
-
 #include "CommonInputBaseTypes.h"
 #include "CommonInputSubsystem.h"
 #include "FrontendDebugHelper.h"
 
+// initialize the key bindings object
 void UListDataObject_KeyRemap::InitKeyRemapData(UEnhancedInputUserSettings* InSettings, UEnhancedPlayerMappableKeyProfile* InKeyProfile, ECommonInputType InKeyType, const FPlayerKeyMapping& InPlayerKeyMapping)
 {
 	this->CachedOwningUserSettings = InSettings;
@@ -13,6 +13,7 @@ void UListDataObject_KeyRemap::InitKeyRemapData(UEnhancedInputUserSettings* InSe
 	this->CachedOwningMappableKeySlot = InPlayerKeyMapping.GetSlot();
 }
 
+// try to retrieve the icon for the current key binding using the data table
 FSlateBrush UListDataObject_KeyRemap::GetIconFromCurrentKey() const
 {
 	check(this->CachedOwningUserSettings);
@@ -34,11 +35,13 @@ FSlateBrush UListDataObject_KeyRemap::GetIconFromCurrentKey() const
 	return FoundBrush;
 }
 
+// getter for the input key type (mouse and keyboard, gamepad, etc)
 ECommonInputType UListDataObject_KeyRemap::GetDesiredInputKeyType() const
 {
 	return this->CachedDesiredInputKeyType;
 }
 
+// map a user specified key to this input, save it in the user settings and broadcast the delegate
 void UListDataObject_KeyRemap::BindNewInputKey(const FKey& InNewKey)
 {
 	check(this->CachedOwningUserSettings);
@@ -55,16 +58,19 @@ void UListDataObject_KeyRemap::BindNewInputKey(const FKey& InNewKey)
 	NotifyListDataModified(this);
 }
 
+// check if a default key was assigned for the input action
 bool UListDataObject_KeyRemap::HasDefaultValue() const
 {
 	return this->GetOwningKeyMapping()->GetDefaultKey().IsValid();
 }
 
+// check if the key binding can be reset to default
 bool UListDataObject_KeyRemap::CanResetBackToDefaultValue() const
 {
 	return this->HasDefaultValue() && this->GetOwningKeyMapping()->IsCustomized();
 }
 
+// set key binding back to default and broadcast delegate
 bool UListDataObject_KeyRemap::TryResetBackToDefaultValue()
 {
 	if (this->CanResetBackToDefaultValue())
@@ -83,6 +89,7 @@ bool UListDataObject_KeyRemap::TryResetBackToDefaultValue()
 	return false;
 }
 
+// retrieve the current key mapping for the input action
 FPlayerKeyMapping* UListDataObject_KeyRemap::GetOwningKeyMapping() const
 {
 	check(this->CachedOwningKeyProfile);

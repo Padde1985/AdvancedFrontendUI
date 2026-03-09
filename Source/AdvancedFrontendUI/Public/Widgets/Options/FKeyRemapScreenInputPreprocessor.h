@@ -6,6 +6,7 @@
 DECLARE_DELEGATE_OneParam(FOnInputPreProcessorKeyPressedDelegate, const FKey& /*PressedKey*/);
 DECLARE_DELEGATE_OneParam(FOnInputPreProcessorKeySelectCanceledDelegate, const FString& /*CanceledReason*/);
 
+// Preprocessor class to intercept the key strokes during key remapping
 class FKeyRemapScreenInputPreprocessor : public IInputProcessor
 {
 public:

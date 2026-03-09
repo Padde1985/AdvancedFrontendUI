@@ -6,6 +6,7 @@
 
 class FOptionsDataInteractionHelper;
 
+// base class for value management, LIST_BASE is for functionality and layout
 UCLASS(Abstract)
 class ADVANCEDFRONTENDUI_API UListDataObject_Value : public UListDataObject_Base
 {

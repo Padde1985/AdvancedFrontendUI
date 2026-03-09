@@ -9,6 +9,7 @@ class UCommonRichTextBlock;
 class UCommonLazyImage;
 class UCommonTextBlock;
 
+// Widget class for the layout of the options right pane for description, etc
 UCLASS(Abstract, BlueprintType, meta=(DisableNativeTick))
 class ADVANCEDFRONTENDUI_API UWidget_OptionsDetailsView : public UUserWidget
 {

@@ -1,5 +1,4 @@
 ﻿#include "Widgets/Options/Widget_OptionsScreen.h"
-#include "FrontendDebugHelper.h"
 #include "ICommonInputModule.h"
 #include "FrontendSettings/FrontendGameUserSettings.h"
 #include "Input/CommonUIInputTypes.h"
@@ -12,6 +11,7 @@
 #include "Widgets/Options/DataObjects/ListDataObject_Collection.h"
 #include "Widgets/Options/ListEntries/Widget_ListEntry_Base.h"
 
+// bind callbacks for the option elements, but also for the button bar on the bottom of the screen
 void UWidget_OptionsScreen::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
@@ -33,6 +33,7 @@ void UWidget_OptionsScreen::NativeOnInitialized()
 	this->CommonListView_OptionsList->OnItemSelectionChanged().AddUObject(this, &UWidget_OptionsScreen::OnListViewItemSelected);
 }
 
+// register the options tab itself
 void UWidget_OptionsScreen::NativeOnActivated()
 {
 	Super::NativeOnActivated();
@@ -56,6 +57,7 @@ void UWidget_OptionsScreen::NativeOnDeactivated()
 	UFrontendGameUserSettings::Get()->ApplySettings(true);
 }
 
+// set the focus on the first item of the list
 UWidget* UWidget_OptionsScreen::NativeGetDesiredFocusTarget() const
 {
 	if (UObject* SelectedObject = this->CommonListView_OptionsList->GetSelectedItem())
@@ -66,6 +68,7 @@ UWidget* UWidget_OptionsScreen::NativeGetDesiredFocusTarget() const
 	return Super::NativeGetDesiredFocusTarget();
 }
 
+// callback for the reset button
 void UWidget_OptionsScreen::OnResetBoundActionTriggered()
 {
 	if (this->ResettableDataArray.IsEmpty()) return;
@@ -88,16 +91,7 @@ void UWidget_OptionsScreen::OnResetBoundActionTriggered()
 			for (UListDataObject_Base* DataToReset : this->ResettableDataArray)
 			{
 				if (!DataToReset) continue;
-				
-				if (DataToReset->TryResetBackToDefaultValue())
-				{
-					Debug::Print(DataToReset->GetDataDisplayName().ToString() + TEXT(" was reset"));
-				}
-				else
-				{
-					bHasDataFailedToReset = true;
-					Debug::Print(DataToReset->GetDataDisplayName().ToString() + TEXT(" failed to reset"));
-				}
+				if (!DataToReset->TryResetBackToDefaultValue())	bHasDataFailedToReset = true;
 			}
 			
 			if (!bHasDataFailedToReset)
@@ -110,11 +104,13 @@ void UWidget_OptionsScreen::OnResetBoundActionTriggered()
 		});
 }
 
+// callback for the back button
 void UWidget_OptionsScreen::OnBackBoundActionTriggered()
 {
 	DeactivateWidget();
 }
 
+// singleton for the data registry
 UOptionsDataRegistry* UWidget_OptionsScreen::GetOrCreateDataRegistry()
 {
 	if (!this->CreatedOwningDataRegistry)
@@ -128,6 +124,7 @@ UOptionsDataRegistry* UWidget_OptionsScreen::GetOrCreateDataRegistry()
 	return this->CreatedOwningDataRegistry;
 }
 
+// callback for hovering an item
 void UWidget_OptionsScreen::OnListViewItemHovered(UObject* InHoveredItem, bool bWasHovered)
 {
 	if (!InHoveredItem) return;
@@ -151,6 +148,7 @@ void UWidget_OptionsScreen::OnListViewItemHovered(UObject* InHoveredItem, bool b
 	}
 }
 
+// callback for selecting an item
 void UWidget_OptionsScreen::OnListViewItemSelected(UObject* InSelectedItem)
 {
 	if (!InSelectedItem) return;
@@ -158,6 +156,7 @@ void UWidget_OptionsScreen::OnListViewItemSelected(UObject* InSelectedItem)
 	this->DetailsView_ListEntryInfo->UpdateDetailsViewInfo(CastChecked<UListDataObject_Base>(InSelectedItem), this->TryGetEntryWidgetClassName(InSelectedItem));
 }
 
+// get the class name of the row type in the list view
 FString UWidget_OptionsScreen::TryGetEntryWidgetClassName(UObject* InOwningListItem) const
 {
 	if (UUserWidget* FoundEntryWidget = this->CommonListView_OptionsList->GetEntryWidgetFromItem(InOwningListItem))
@@ -168,6 +167,7 @@ FString UWidget_OptionsScreen::TryGetEntryWidgetClassName(UObject* InOwningListI
 	return TEXT("Entry Widget not valid");
 }
 
+// callback when the data should be reset
 void UWidget_OptionsScreen::OnListViewListDataModified(UListDataObject_Base* ModifiedData, EOptionsListDataModifyReason ModifyReason)
 {
 	if (!ModifiedData || this->bIsResettingData) return;
@@ -186,6 +186,7 @@ void UWidget_OptionsScreen::OnListViewListDataModified(UListDataObject_Base* Mod
 	if (this->ResettableDataArray.IsEmpty()) RemoveActionBinding(this->ResetActionHandle);
 }
 
+// activate one of the options tabs
 void UWidget_OptionsScreen::OnOptionsTabSelected(FName TabId)
 {
 	this->DetailsView_ListEntryInfo->ClearDetailsViewInfo();

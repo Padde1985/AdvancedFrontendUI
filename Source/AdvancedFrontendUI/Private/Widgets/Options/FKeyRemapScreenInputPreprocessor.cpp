@@ -1,18 +1,20 @@
 ﻿#include "Widgets/Options/FKeyRemapScreenInputPreprocessor.h"
-
 #include "CommonInputSubsystem.h"
 #include "CommonUITypes.h"
 #include "ICommonInputModule.h"
 
+// variable initialization
 FKeyRemapScreenInputPreprocessor::FKeyRemapScreenInputPreprocessor(ECommonInputType InInputTypeToListenTo, ULocalPlayer* InOwningLocalPlayer) 
 	: CachedInputTypeToListenTo(InInputTypeToListenTo), CachedOwningLocalPlayer(InOwningLocalPlayer)
 {
 }
 
+// empty Tick function
 void FKeyRemapScreenInputPreprocessor::Tick(const float DeltaTime, FSlateApplication& SlateApp, TSharedRef<ICursor> Cursor)
 {
 }
 
+// callback for a key input
 bool FKeyRemapScreenInputPreprocessor::HandleKeyDownEvent(FSlateApplication& SlateApp, const FKeyEvent& InKeyEvent)
 {
 	this->ProcessPressedKey(InKeyEvent.GetKey());
@@ -20,6 +22,7 @@ bool FKeyRemapScreenInputPreprocessor::HandleKeyDownEvent(FSlateApplication& Sla
 	return true;
 }
 
+// callback for a mouse event
 bool FKeyRemapScreenInputPreprocessor::HandleMouseButtonDownEvent(FSlateApplication& SlateApp, const FPointerEvent& MouseEvent)
 {
 	this->ProcessPressedKey(MouseEvent.GetEffectingButton());
@@ -27,6 +30,7 @@ bool FKeyRemapScreenInputPreprocessor::HandleMouseButtonDownEvent(FSlateApplicat
 	return true;
 }
 
+// process the key input
 void FKeyRemapScreenInputPreprocessor::ProcessPressedKey(const FKey& InPressedKey)
 {
 	if (InPressedKey == EKeys::Escape)

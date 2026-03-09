@@ -7,6 +7,7 @@
 class UCommonLazyImage;
 class UCommonTextBlock;
 
+// base class for all buttons (defines basic parameters to have the same look and feel everywhere)
 UCLASS(Abstract, BlueprintType, meta=(DisableNativeTick))
 class ADVANCEDFRONTENDUI_API UFrontendCommonButtonBase : public UCommonButtonBase
 {

@@ -11,6 +11,7 @@ class UFrontendCommonListView;
 class UFrontendTabListWidgetBase;
 class UOptionsDataRegistry;
 
+// widget blueprint for the options screen with all visual elements
 UCLASS(Abstract, BlueprintType, meta=(DisableNativeTick), PrioritizeCategories=("Frontend Options Screen"))
 class ADVANCEDFRONTENDUI_API UWidget_OptionsScreen : public UWidget_ActivatableBase
 {

@@ -24,6 +24,7 @@
 #define GET_DESCRIPTION(InKey) \
 	LOCTABLE("/Game/UI/StringTables/ST_OptionsScreenDescription.ST_OptionsScreenDescription", InKey)
 
+// create the different tabs
 void UOptionsDataRegistry::InitOptionsDataRegistry(ULocalPlayer* InOwningLocalPlayer)
 {
 	this->InitGameplayCollectionTab();
@@ -32,11 +33,13 @@ void UOptionsDataRegistry::InitOptionsDataRegistry(ULocalPlayer* InOwningLocalPl
 	this->InitControllsCollectionTab(InOwningLocalPlayer);
 }
 
+// return the tabs
 const TArray<UListDataObject_Collection*>& UOptionsDataRegistry::GetRegisteredOptionsTabCollection() const
 {
 	return this->RegisteredOptionsTabCollection;
 }
 
+// get the tab content of the selected tab
 TArray<UListDataObject_Base*> UOptionsDataRegistry::GetListSourceItemsBySelectedTabID(const FName& InSelectedTabID) const
 {
 	UListDataObject_Collection* const* FoundTabCollectionPtr = this->RegisteredOptionsTabCollection.FindByPredicate(
@@ -63,6 +66,7 @@ TArray<UListDataObject_Base*> UOptionsDataRegistry::GetListSourceItemsBySelected
 	return AllChildListItems;
 }
 
+// build the content for the gameplay tab
 void UOptionsDataRegistry::InitGameplayCollectionTab()
 {
 	UListDataObject_Collection* GameplayTabCollection = NewObject<UListDataObject_Collection>();
@@ -104,6 +108,7 @@ void UOptionsDataRegistry::InitGameplayCollectionTab()
 	this->RegisteredOptionsTabCollection.Add(GameplayTabCollection);
 }
 
+// build the content of the audio tab
 void UOptionsDataRegistry::InitAudioCollectionTab()
 {
 	// create the Audio tab itself
@@ -208,6 +213,7 @@ void UOptionsDataRegistry::InitAudioCollectionTab()
 	this->RegisteredOptionsTabCollection.Add(AudioTabCollection);
 }
 
+// build the content for the video tab
 void UOptionsDataRegistry::InitVideoCollectionTab()
 {
 	UListDataObject_Collection* VideoTabCollection = NewObject<UListDataObject_Collection>();
@@ -549,6 +555,7 @@ void UOptionsDataRegistry::InitVideoCollectionTab()
 	this->RegisteredOptionsTabCollection.Add(VideoTabCollection);
 }
 
+// build the content of the key bindings tab 
 void UOptionsDataRegistry::InitControllsCollectionTab(ULocalPlayer* InOwningLocalPlayer)
 {
 	UListDataObject_Collection* ControllsTabCollection = NewObject<UListDataObject_Collection>();
@@ -635,6 +642,7 @@ void UOptionsDataRegistry::InitControllsCollectionTab(ULocalPlayer* InOwningLoca
 	this->RegisteredOptionsTabCollection.Add(ControllsTabCollection);
 }
 
+// get all children recursively for the given element
 void UOptionsDataRegistry::FindChildListDataRecursively(const UListDataObject_Base* InParentData, TArray<UListDataObject_Base*>& OutFoundChildListData) const
 {
 	if (!InParentData || !InParentData->HasAnyChildListData()) return;

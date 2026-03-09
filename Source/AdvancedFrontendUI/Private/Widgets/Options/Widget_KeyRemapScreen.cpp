@@ -1,13 +1,14 @@
 ﻿#include "Widgets/Options/Widget_KeyRemapScreen.h"
-
 #include "CommonRichTextBlock.h"
 #include "Widgets/Options/FKeyRemapScreenInputPreprocessor.h"
 
+// set filter for input type (mouse/keyboard, gamepad, etc)
 void UWidget_KeyRemapScreen::SetDesiredInputTypeToFilter(ECommonInputType InDesiredInputType)
 {
 	this->CachedDesiredInputType = InDesiredInputType;
 }
 
+// bind callbacks, show widget on screen, and register the input pre processor
 void UWidget_KeyRemapScreen::NativeOnActivated()
 {
 	Super::NativeOnActivated();
@@ -36,6 +37,7 @@ void UWidget_KeyRemapScreen::NativeOnActivated()
 	this->CommonRichText_RemapMessage->SetText(FText::FromString(DisplayRichMessage));
 }
 
+// unregister the pre processor to enable the engine to react on our key strokes
 void UWidget_KeyRemapScreen::NativeOnDeactivated()
 {
 	Super::NativeOnDeactivated();
@@ -47,6 +49,7 @@ void UWidget_KeyRemapScreen::NativeOnDeactivated()
 	}
 }
 
+// callback for received key input during remapping
 void UWidget_KeyRemapScreen::OnValidKeyPressedDetected(const FKey& PressedKey)
 {
 	this->RequestDeactivateWidget([this, PressedKey]()
@@ -55,6 +58,7 @@ void UWidget_KeyRemapScreen::OnValidKeyPressedDetected(const FKey& PressedKey)
 	});
 }
 
+// callback for canceling key remapping
 void UWidget_KeyRemapScreen::OnKeySelectCanceled(const FString& CanceledReason)
 {
 	this->RequestDeactivateWidget([this, CanceledReason]()
@@ -63,9 +67,10 @@ void UWidget_KeyRemapScreen::OnKeySelectCanceled(const FString& CanceledReason)
 	});
 }
 
+// deactivate widget and go back to the previous widget screen
 void UWidget_KeyRemapScreen::RequestDeactivateWidget(TFunction<void()> PreDeactivateCallback)
 {
-	// Delay a tick to amke sure the input is processed correctly
+	// Delay a tick to make sure the input is processed correctly
 	FTSTicker::GetCoreTicker().AddTicker(FTickerDelegate::CreateLambda([PreDeactivateCallback, this](float DeltaTime)
 	{
 		PreDeactivateCallback();

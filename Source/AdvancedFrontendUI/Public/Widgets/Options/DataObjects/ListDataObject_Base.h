@@ -10,6 +10,7 @@ class UListDataObject_Base;
 
 DECLARE_MULTICAST_DELEGATE_TwoParams(FOnListDataModifiedDelegate, UListDataObject_Base*, EOptionsListDataModifyReason);
 
+// base class for all list data objects (Scalars, checkboxes, rotators, etc)
 UCLASS(Abstract)
 class ADVANCEDFRONTENDUI_API UListDataObject_Base : public UObject
 {

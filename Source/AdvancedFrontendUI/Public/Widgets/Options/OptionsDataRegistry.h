@@ -7,6 +7,7 @@
 class UListDataObject_Base;
 class UListDataObject_Collection;
 
+// Options data registry, basically a container that holds all the different options including widgets, etc
 UCLASS()
 class ADVANCEDFRONTENDUI_API UOptionsDataRegistry : public UObject
 {

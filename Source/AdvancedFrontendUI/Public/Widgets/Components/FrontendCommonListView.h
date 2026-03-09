@@ -6,6 +6,7 @@
 
 class UDataAsset_DataListEntryMapping;
 
+// List view class used for the Main menu and/or the different option screens
 UCLASS(PrioritizeCategories=("Frontend List View Settings"))
 class ADVANCEDFRONTENDUI_API UFrontendCommonListView : public UCommonListView
 {

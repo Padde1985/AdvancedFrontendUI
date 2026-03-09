@@ -19,6 +19,7 @@ enum class EAsyncPushWidgetState : uint8
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnButtonDescriptionTextUpdatedDelegate, UFrontendCommonButtonBase*, BroadcastingButton, FText, DescriptionText);
 
+// Subsystem for managing the different widgets and their dependencies
 UCLASS()
 class ADVANCEDFRONTENDUI_API UFrontendUISubsystem : public UGameInstanceSubsystem
 {

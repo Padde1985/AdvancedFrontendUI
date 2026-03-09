@@ -9,6 +9,7 @@
 class UListDataObject_Base;
 class UCommonTextBlock;
 
+// base class for the User interface widget blueprints
 UCLASS(Abstract, BlueprintType, meta=(DisableNativeTick))
 class ADVANCEDFRONTENDUI_API UWidget_ListEntry_Base : public UCommonUserWidget, public IUserObjectListEntry //<- this one is needed to show up in the entry widget class field in the Widget Blueprint
 {

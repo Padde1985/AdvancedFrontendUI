@@ -1,6 +1,7 @@
 ﻿#include "FrontendFunctionLibrary.h"
 #include "FrontendSettings/FrontendDeveloperSettings.h"
 
+// find the corresponding widget class for a given GameplayTag (defined in the Project settings)
 TSoftClassPtr<UWidget_ActivatableBase> UFrontendFunctionLibrary::GetFrontendSoftWidgetClassByTag(FGameplayTag InWidgetTag)
 {
 	const UFrontendDeveloperSettings* FrontendDeveloperSettings = GetDefault<UFrontendDeveloperSettings>();
@@ -10,6 +11,7 @@ TSoftClassPtr<UWidget_ActivatableBase> UFrontendFunctionLibrary::GetFrontendSoft
 	return FrontendDeveloperSettings->FrontendWidgetMap.FindRef(InWidgetTag);
 }
 
+// get the image corresponding to the Image Tag (defined in the Project settings)
 TSoftObjectPtr<UTexture2D> UFrontendFunctionLibrary::GetOptionsSoftImageByTag(FGameplayTag InImageTag)
 {
 	const UFrontendDeveloperSettings* FrontendDeveloperSettings = GetDefault<UFrontendDeveloperSettings>();

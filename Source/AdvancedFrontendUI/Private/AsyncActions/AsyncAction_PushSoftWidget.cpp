@@ -1,6 +1,8 @@
 ﻿#include "AsyncActions/AsyncAction_PushSoftWidget.h"
 #include "Subsystems/FrontendUISubsystem.h"
 
+
+// create widget with given parameters
 UAsyncAction_PushSoftWidget* UAsyncAction_PushSoftWidget::PushSoftWidget(const UObject* WorldContextObject, APlayerController* PlayerController, TSoftClassPtr<UWidget_ActivatableBase> InSoftWidgetClass, FGameplayTag InWidgetStackTag, bool bFocusOnNewlyPushedWidget)
 {
 	checkf(!InSoftWidgetClass.IsNull(), TEXT("PushSoftWidgetToStack was passed a null soft widget class"));
@@ -25,6 +27,7 @@ UAsyncAction_PushSoftWidget* UAsyncAction_PushSoftWidget::PushSoftWidget(const U
 	return nullptr;
 }
 
+// push widget to stack and call delegates
 void UAsyncAction_PushSoftWidget::Activate()
 {
 	UFrontendUISubsystem* FrontendSubsystem = UFrontendUISubsystem::Get(this->CachedOwningWorld.Get());

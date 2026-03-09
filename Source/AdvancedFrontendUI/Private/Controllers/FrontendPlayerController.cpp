@@ -16,6 +16,8 @@ void AFrontendPlayerController::BeginPlayingState()
 	
 	if (this->bIsLoadFinsihed) this->InitializeWidget();
 	
+	// check if a benchmark was already performed.
+	// if a benchmark was already performed, apply the recommended settings as default. User specific settings overwrite the recommendations based on saved parameters
 	UFrontendGameUserSettings* GameUserSettings = UFrontendGameUserSettings::Get();
 	if (GameUserSettings->GetLastCPUBenchmarkResult() == -1.f || GameUserSettings->GetLastGPUBenchmarkResult() == -1.f)
 	{
@@ -30,6 +32,7 @@ void AFrontendPlayerController::BeginPlayingState()
 	}
 }
 
+// server version to initialize the default camera angle
 void AFrontendPlayerController::OnPossess(APawn* aPawn)
 {
 	Super::OnPossess(aPawn);
@@ -42,6 +45,7 @@ void AFrontendPlayerController::OnPossess(APawn* aPawn)
 	}
 }
 
+// push the primary widget to the screen as underlying layout template
 void AFrontendPlayerController::InitializeWidget()
 {	
 	if (UWidget_PrimaryLayout* PrimaryLayoutWidget = CreateWidget<UWidget_PrimaryLayout>(this, this->PrimaryLayoutWidgetClass))

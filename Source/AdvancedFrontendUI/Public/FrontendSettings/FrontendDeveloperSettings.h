@@ -7,6 +7,7 @@
 
 class UWidget_ActivatableBase;
 
+// this class creates new entries in the Project settings in category specified in the Display name
 UCLASS(Config = Game, DefaultConfig, meta=(DisplayName = "Frontend UI Settings"))
 class ADVANCEDFRONTENDUI_API UFrontendDeveloperSettings : public UDeveloperSettings
 {

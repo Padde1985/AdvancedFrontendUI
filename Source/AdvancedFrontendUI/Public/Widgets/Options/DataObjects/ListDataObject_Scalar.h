@@ -5,6 +5,7 @@
 #include "ListDataObject_Value.h"
 #include "ListDataObject_Scalar.generated.h"
 
+// scalar class for the slider representation (e.g. brightness)
 UCLASS()
 class ADVANCEDFRONTENDUI_API UListDataObject_Scalar : public UListDataObject_Value
 {

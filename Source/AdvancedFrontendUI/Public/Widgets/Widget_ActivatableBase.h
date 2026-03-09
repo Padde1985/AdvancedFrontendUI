@@ -6,6 +6,7 @@
 
 class AFrontendPlayerController;
 
+// base class for all user interface widgets for common UI
 UCLASS(Abstract, BlueprintType, meta=(DisableNativeTick))
 class ADVANCEDFRONTENDUI_API UWidget_ActivatableBase : public UCommonActivatableWidget
 {

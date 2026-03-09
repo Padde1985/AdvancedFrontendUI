@@ -1,7 +1,7 @@
 ﻿#include "AsyncActions/AsyncAction_PushConfirmScreen.h"
-
 #include "Subsystems/FrontendUISubsystem.h"
 
+// create the confirmation screen with given parameters
 UAsyncAction_PushConfirmScreen* UAsyncAction_PushConfirmScreen::PushConfirmScreen(const UObject* WorldContextObject, EConfirmScreenType ScreenType, FText InScreenTitle, FText InScreenMessage)
 {
 	if (GEngine)
@@ -23,6 +23,7 @@ UAsyncAction_PushConfirmScreen* UAsyncAction_PushConfirmScreen::PushConfirmScree
 	return nullptr;
 }
 
+// show confirmation screen on the screen
 void UAsyncAction_PushConfirmScreen::Activate()
 {
 	UFrontendUISubsystem::Get(this->CachedOwningWorld.Get())->PushConfirmScreenToModalStackAsync(

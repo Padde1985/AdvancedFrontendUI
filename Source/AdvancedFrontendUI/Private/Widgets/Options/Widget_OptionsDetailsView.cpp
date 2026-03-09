@@ -4,6 +4,7 @@
 #include "CommonTextBlock.h"
 #include "Widgets/Options/DataObjects/ListDataObject_Base.h"
 
+// update the information shown in the right pane
 void UWidget_OptionsDetailsView::UpdateDetailsViewInfo(UListDataObject_Base* InDataObject, const FString& InEntryWidgetClassName)
 {
 	if (!InDataObject) return;
@@ -28,6 +29,7 @@ void UWidget_OptionsDetailsView::UpdateDetailsViewInfo(UListDataObject_Base* InD
 	this->CommonRichText_DisabledReason->SetText(InDataObject->IsDataCurrentlyEditable() ? FText::GetEmpty() : InDataObject->GetDisabledRichText());
 }
 
+// empty the details view when deselecting an option
 void UWidget_OptionsDetailsView::ClearDetailsViewInfo() const
 {
 	this->CommonTextBlock_Title->SetText(FText::GetEmpty());
@@ -37,6 +39,7 @@ void UWidget_OptionsDetailsView::ClearDetailsViewInfo() const
 	this->CommonRichText_DisabledReason->SetText(FText::GetEmpty());
 }
 
+// initialize the details pane (show an empty pane)
 void UWidget_OptionsDetailsView::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();

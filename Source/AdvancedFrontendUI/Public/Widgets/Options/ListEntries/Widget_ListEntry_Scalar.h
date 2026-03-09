@@ -8,6 +8,7 @@ class UAnalogSlider;
 class UCommonNumericTextBlock;
 class UListDataObject_Scalar;
 
+// slider representation of a value
 UCLASS(Abstract, BlueprintType, meta=(DisableNativeTick))
 class ADVANCEDFRONTENDUI_API UWidget_ListEntry_Scalar : public UWidget_ListEntry_Base
 {

@@ -1,6 +1,6 @@
 ﻿#include "Widgets/Widget_PrimaryLayout.h"
-#include "FrontendDebugHelper.h"
 
+// get the widget blueprint class by Gameplay Tag
 UCommonActivatableWidgetContainerBase* UWidget_PrimaryLayout::FindWidgetStackByTag(const FGameplayTag& InTag) const
 {
 	checkf(this->RegisteredWidgetStackMap.Contains(InTag), TEXT("Cannot find the widget stack by the tag %s"), *InTag.ToString());
@@ -8,6 +8,7 @@ UCommonActivatableWidgetContainerBase* UWidget_PrimaryLayout::FindWidgetStackByT
 	return this->RegisteredWidgetStackMap.FindRef(InTag);
 }
 
+// create the mapping table (array)
 void UWidget_PrimaryLayout::RegisterWidgetStack(FGameplayTag InStackTag, UCommonActivatableWidgetContainerBase* InStack)
 {
 	// check if we are running in run time and not just in the unreal editor moving stuff around

@@ -1,6 +1,7 @@
 ﻿#include "Widgets/Options/DataAsset_DataListEntryMapping.h"
 #include "Widgets/Options/DataObjects/ListDataObject_Base.h"
 
+// find the widget class for the given data object, the found widget can even be a parent widget class
 TSubclassOf<UWidget_ListEntry_Base> UDataAsset_DataListEntryMapping::FindEntryWidgetClassByDataObject(UListDataObject_Base* InDataObject) const
 {
 	check(InDataObject);

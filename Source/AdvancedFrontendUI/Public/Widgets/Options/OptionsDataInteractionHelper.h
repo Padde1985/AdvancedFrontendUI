@@ -5,6 +5,7 @@
 
 class UFrontendGameUserSettings;
 
+// helper class for the dynamic getters and setters
 class ADVANCEDFRONTENDUI_API FOptionsDataInteractionHelper
 {
 public:

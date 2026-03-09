@@ -6,6 +6,7 @@
 
 class UUserWidget;
 
+// creates a new category under project settings, the name is derived from teh class name
 UCLASS(Config = Game, DefaultConfig)
 class ADVANCEDFRONTENDUI_API UFrontendLoadingScreenSettings : public UDeveloperSettings
 {

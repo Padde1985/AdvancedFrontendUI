@@ -5,6 +5,7 @@
 #include "Widgets/Options/DataObjects/ListDataObject_Collection.h"
 #include "Widgets/Options/ListEntries/Widget_ListEntry_Base.h"
 
+// is called when the widget gets created by the engine
 UUserWidget& UFrontendCommonListView::OnGenerateEntryWidgetInternal(UObject* Item, TSubclassOf<UUserWidget> DesiredEntryClass, const TSharedRef<STableViewBase>& OwnerTable)
 {
 	if (IsDesignTime()) return Super::OnGenerateEntryWidgetInternal(Item, DesiredEntryClass, OwnerTable);
@@ -19,11 +20,14 @@ UUserWidget& UFrontendCommonListView::OnGenerateEntryWidgetInternal(UObject* Ite
 	}
 }
 
+// check if an list item is selectable or navigable (list entries only)
 bool UFrontendCommonListView::OnIsSelectableOrNavigableInternal(UObject* FirstSelectedItem)
 {
 	return !FirstSelectedItem->IsA<UListDataObject_Collection>();
 }
 
+// only in editor!!!
+// check that the mapping in Project settings is set up correctly for the given Widget type
 #if WITH_EDITOR
 void UFrontendCommonListView::ValidateCompiledDefaults(IWidgetCompilerLog& CompileLog) const
 {

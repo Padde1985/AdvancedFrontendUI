@@ -4,6 +4,7 @@
 #include "FrontendSettings/FrontendLoadingScreenSettings.h"
 #include "Interfaces/FrontendLoadingScreenInterface.h"
 
+// interface function from the Game instance parent class and serves as a checkpoint before the subsystem is being created
 bool UFrontendLoadingScreenSubsystem::ShouldCreateSubsystem(UObject* Outer) const
 {
 	if (!CastChecked<UGameInstance>(Outer)->IsDedicatedServerInstance())
@@ -17,18 +18,21 @@ bool UFrontendLoadingScreenSubsystem::ShouldCreateSubsystem(UObject* Outer) cons
 	return false;
 }
 
+// initialization
 void UFrontendLoadingScreenSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	FCoreUObjectDelegates::PreLoadMapWithContext.AddUObject(this, &ThisClass::OnMapPreLoaded);
 	FCoreUObjectDelegates::PostLoadMapWithWorld.AddUObject(this, &ThisClass::OnMapPostLoaded);
 }
 
+// deinitalization, is called before the subsystem is being destroyed
 void UFrontendLoadingScreenSubsystem::Deinitialize()
 {
 	FCoreUObjectDelegates::PreLoadMapWithContext.RemoveAll(this);
 	FCoreUObjectDelegates::PostLoadMapWithWorld.RemoveAll(this);
 }
 
+// return the Owning World Object that is tickable (the World object could be different to the gameplay world)
 UWorld* UFrontendLoadingScreenSubsystem::GetTickableGameObjectWorld() const
 {
 	if (UGameInstance* OwningGameInstance = GetGameInstance()) return OwningGameInstance->GetWorld();
@@ -36,34 +40,38 @@ UWorld* UFrontendLoadingScreenSubsystem::GetTickableGameObjectWorld() const
 	return nullptr;
 }
 
+// Tick function as in all tickable objects
 void UFrontendLoadingScreenSubsystem::Tick(float DeltaTime)
 {
 	this->TryUpdateLoadingScreen();
 }
 
+// returns the tickable type
+// never = Tick never gets called
+// always = Tick is called every frame with no further checks
+// conditional = Tick is only called when function IsTickable returns true
 ETickableTickType UFrontendLoadingScreenSubsystem::GetTickableTickType() const
 {	
-	//if (IsTemplate()) return ETickableTickType::Never;
+	if (IsTemplate()) return ETickableTickType::Never;
 	
 	// works together with IsTickable, if set to always, IsTickable is not called
 	return ETickableTickType::Conditional;
 }
 
+// check if object should Tick
 bool UFrontendLoadingScreenSubsystem::IsTickable() const
-{
-	const bool bIsGameInstance = GetGameInstance() ? true : false;
-	bool bGameViewportClient = false;
-	if (bIsGameInstance) bGameViewportClient = GetGameInstance()->GetGameViewportClient() ? true : false;
-	
-	return bIsGameInstance && bGameViewportClient;
+{	
+	return GetGameInstance() && GetGameInstance()->GetGameViewportClient();
 }
 
+// benchmark function, has to be overridden by the child class when implementing the interface
 TStatId UFrontendLoadingScreenSubsystem::GetStatId() const
 {
 	// returns benchmarks provided by Unreal Engine
 	RETURN_QUICK_DECLARE_CYCLE_STAT(UFrontendLoadingScreenSubsystem, STATGROUP_Tickables);
 }
 
+// gets called as callback function of the engine
 void UFrontendLoadingScreenSubsystem::OnMapPreLoaded(const FWorldContext& WorldContext, const FString& MapName)
 {
 	if (WorldContext.OwningGameInstance != GetGameInstance()) return;
@@ -75,11 +83,13 @@ void UFrontendLoadingScreenSubsystem::OnMapPreLoaded(const FWorldContext& WorldC
 	this->TryUpdateLoadingScreen();
 }
 
+// gets called as callback of the engine
 void UFrontendLoadingScreenSubsystem::OnMapPostLoaded(UWorld* LoadedWorld)
 {
 	if (LoadedWorld && LoadedWorld->GetGameInstance() == GetGameInstance()) this->bIsCurrentlyLoadingMap = false;
 }
 
+// update the loading screen with the current loading reason or step
 void UFrontendLoadingScreenSubsystem::TryUpdateLoadingScreen()
 {
 	if (this->IsPreLoadScreenActive()) return;
@@ -101,6 +111,7 @@ void UFrontendLoadingScreenSubsystem::TryUpdateLoadingScreen()
 	}
 }
 
+// checks if there is a pre-load screen active (defined in the unreal editor in Project settings)
 bool UFrontendLoadingScreenSubsystem::IsPreLoadScreenActive() const
 {
 	if (FPreLoadScreenManager* PreLoadScreenManager = FPreLoadScreenManager::Get()) return PreLoadScreenManager->HasValidActivePreLoadScreen();
@@ -108,6 +119,7 @@ bool UFrontendLoadingScreenSubsystem::IsPreLoadScreenActive() const
 	return false;
 }
 
+// determine if the loading screen should be shown
 bool UFrontendLoadingScreenSubsystem::ShouldShowLoadingScreen()
 {
 	const UFrontendLoadingScreenSettings* LoadingScreenSettings = GetDefault<UFrontendLoadingScreenSettings>();
@@ -134,6 +146,7 @@ bool UFrontendLoadingScreenSubsystem::ShouldShowLoadingScreen()
 	return false;
 }
 
+// check if loading screen should be displayed (several areas have to be fully loaded to prevent it from being shown)
 bool UFrontendLoadingScreenSubsystem::CheckTheNeedToShowLoadingScreen()
 {
 	if (this->bIsCurrentlyLoadingMap)
@@ -168,6 +181,7 @@ bool UFrontendLoadingScreenSubsystem::CheckTheNeedToShowLoadingScreen()
 	return false;
 }
 
+// create the widget if not existent yet
 void UFrontendLoadingScreenSubsystem::TryDisplayLoadingScreenIfNone()
 {
 	if (this->CachedCreatedLoadingScreenWidget) return;
@@ -185,6 +199,7 @@ void UFrontendLoadingScreenSubsystem::TryDisplayLoadingScreenIfNone()
 	this->NotifyLoadingScreenVisibilityChanged(true);
 }
 
+// remove the loading screen from viewport and show start menu instead
 void UFrontendLoadingScreenSubsystem::TryRemoveLoadingScreen()
 {
 	if (!this->CachedCreatedLoadingScreenWidget) return;
@@ -193,6 +208,7 @@ void UFrontendLoadingScreenSubsystem::TryRemoveLoadingScreen()
 	this->CachedCreatedLoadingScreenWidget.Reset();
 }
 
+// loading screen visbility changed (either it is just being displayed or was just destroyed)
 void UFrontendLoadingScreenSubsystem::NotifyLoadingScreenVisibilityChanged(bool bIsVisible)
 {
 	for (ULocalPlayer* ExistingLocalPlayer : GetGameInstance()->GetLocalPlayers())

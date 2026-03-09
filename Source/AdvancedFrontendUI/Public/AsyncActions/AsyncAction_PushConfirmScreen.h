@@ -7,6 +7,7 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnConfirmScreenButtonClickedEvent, EConfirmScreenButtonType, ClickedButtonType);
 
+// Async Action to push the confirmation screen to the active window (this is not the screen itself)
 UCLASS()
 class ADVANCEDFRONTENDUI_API UAsyncAction_PushConfirmScreen : public UBlueprintAsyncActionBase
 {

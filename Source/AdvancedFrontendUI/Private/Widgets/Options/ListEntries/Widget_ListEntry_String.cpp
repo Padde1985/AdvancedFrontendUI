@@ -1,10 +1,10 @@
 ﻿#include "Widgets/Options/ListEntries/Widget_ListEntry_String.h"
-
 #include "CommonInputSubsystem.h"
 #include "Widgets/Components/FrontendCommonButtonBase.h"
 #include "Widgets/Components/FrontendCommonRotator.h"
 #include "Widgets/Options/DataObjects/ListDataObject_String.h"
 
+// callback when the data object is set
 void UWidget_ListEntry_String::OnOwningListDataObjectSet(UListDataObject_Base* InOwningListDataObject)
 {
 	Super::OnOwningListDataObjectSet(InOwningListDataObject);
@@ -15,6 +15,7 @@ void UWidget_ListEntry_String::OnOwningListDataObjectSet(UListDataObject_Base* I
 	this->CommonRotator_AvailableOptions->SetSelectedOptionByText(this->CachedOwningStringDataObject->GetCurrentDisplayText());
 }
 
+// bind callbacks to all widget objects
 void UWidget_ListEntry_String::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
@@ -30,6 +31,7 @@ void UWidget_ListEntry_String::NativeOnInitialized()
 	this->CommonRotator_AvailableOptions->OnRotatedEvent.AddUObject(this, &UWidget_ListEntry_String::OnRotatorValueChanged);
 }
 
+// callback when the data objects gets changed
 void UWidget_ListEntry_String::OnOwningListDataObjectModified(UListDataObject_Base* OwningModifiedData, EOptionsListDataModifyReason ModifyReason)
 {
 	if (this->CachedOwningStringDataObject)
@@ -38,6 +40,7 @@ void UWidget_ListEntry_String::OnOwningListDataObjectModified(UListDataObject_Ba
 	}
 }
 
+// toggle the edit state for all UI elements
 void UWidget_ListEntry_String::OnToggleEditableState(bool bIsEditable)
 {
 	Super::OnToggleEditableState(bIsEditable);
@@ -47,6 +50,7 @@ void UWidget_ListEntry_String::OnToggleEditableState(bool bIsEditable)
 	this->CommonButton_NextOption->SetIsEnabled(bIsEditable);
 }
 
+// callback for the previous button
 void UWidget_ListEntry_String::OnPreviousOptionButtonClicked()
 {
 	if (this->CachedOwningStringDataObject)
@@ -57,6 +61,8 @@ void UWidget_ListEntry_String::OnPreviousOptionButtonClicked()
 	SelectThisEntryWidget();
 }
 
+
+// callback for the next button
 void UWidget_ListEntry_String::OnNextOptionButtonClicked()
 {
 	if (this->CachedOwningStringDataObject)

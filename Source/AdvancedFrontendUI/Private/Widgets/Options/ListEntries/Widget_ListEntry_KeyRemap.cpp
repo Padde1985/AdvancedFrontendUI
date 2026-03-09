@@ -6,6 +6,7 @@
 #include "Widgets/Options/Widget_KeyRemapScreen.h"
 #include "Widgets/Options/DataObjects/ListDataObject_KeyRemap.h"
 
+// callback when the owning data object is set
 void UWidget_ListEntry_KeyRemap::OnOwningListDataObjectSet(UListDataObject_Base* InOwningListDataObject)
 {
 	Super::OnOwningListDataObjectSet(InOwningListDataObject);
@@ -14,11 +15,13 @@ void UWidget_ListEntry_KeyRemap::OnOwningListDataObjectSet(UListDataObject_Base*
 	this->CommonButton_RemapKey->SetButtonDisplayImage(this->CachedOwningKeyRemapDataObject->GetIconFromCurrentKey());
 }
 
+// callback when the data object gets modified
 void UWidget_ListEntry_KeyRemap::OnOwningListDataObjectModified(UListDataObject_Base* OwningModifiedData, EOptionsListDataModifyReason ModifyReason)
 {	
 	if (this->CachedOwningKeyRemapDataObject) this->CommonButton_RemapKey->SetButtonDisplayImage(this->CachedOwningKeyRemapDataObject->GetIconFromCurrentKey());
 }
 
+// bind button callbacks
 void UWidget_ListEntry_KeyRemap::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
@@ -27,6 +30,7 @@ void UWidget_ListEntry_KeyRemap::NativeOnInitialized()
 	this->CommonButton_ResetKeyBinding->OnClicked().AddUObject(this, &ThisClass::OnResetKeyBindingButtonClicked);
 }
 
+// call the process for rebinding a key mapping
 void UWidget_ListEntry_KeyRemap::OnRemapKeyButtonClicked()
 {
 	SelectThisEntryWidget();
@@ -49,6 +53,7 @@ void UWidget_ListEntry_KeyRemap::OnRemapKeyButtonClicked()
 	});
 }
 
+// reset the key binding back to default if possible
 void UWidget_ListEntry_KeyRemap::OnResetKeyBindingButtonClicked()
 {
 	SelectThisEntryWidget();
@@ -83,11 +88,13 @@ void UWidget_ListEntry_KeyRemap::OnResetKeyBindingButtonClicked()
 		);
 }
 
+// callback to receive the pressed key during key remapping
 void UWidget_ListEntry_KeyRemap::OnKeyToRemapPressed(const FKey& PressedKey)
 {
 	if (this->CachedOwningKeyRemapDataObject) this->CachedOwningKeyRemapDataObject->BindNewInputKey(PressedKey);
 }
 
+// callback in case the key remapping is canceled
 void UWidget_ListEntry_KeyRemap::OnKeyRemapCanceled(const FString& CanceledReason)
 {
 	UFrontendUISubsystem::Get(this)->PushConfirmScreenToModalStackAsync(

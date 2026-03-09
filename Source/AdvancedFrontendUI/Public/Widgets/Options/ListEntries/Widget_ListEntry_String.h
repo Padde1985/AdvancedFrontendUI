@@ -8,6 +8,7 @@ class UListDataObject_String;
 class UFrontendCommonRotator;
 class UFrontendCommonButtonBase;
 
+// graphical representation of the standard layout (two buttons with a rotator in between)
 UCLASS(Abstract, BlueprintType, meta=(DisableNativeTick))
 class ADVANCEDFRONTENDUI_API UWidget_ListEntry_String : public UWidget_ListEntry_Base
 {

@@ -2,6 +2,7 @@
 
 #include "FrontendStructTypes.generated.h"
 
+// Structure for edit condition descriptors, i.e. modifies for edit functionality
 USTRUCT()
 struct FOptionsDataEditConditionDescriptor
 {

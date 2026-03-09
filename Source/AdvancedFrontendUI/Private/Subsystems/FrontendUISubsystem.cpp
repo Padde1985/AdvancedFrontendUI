@@ -1,5 +1,4 @@
 ﻿#include "Subsystems/FrontendUISubsystem.h"
-
 #include "FrontendFunctionLibrary.h"
 #include "FrontendGameplayTags.h"
 #include "Engine/AssetManager.h"
@@ -8,6 +7,7 @@
 #include "Widgets/Widget_ConfirmationScreen.h"
 #include "Widgets/Widget_PrimaryLayout.h"
 
+// static getter (singleton)
 UFrontendUISubsystem* UFrontendUISubsystem::Get(const UObject* WorldContextObject)
 {
 	if (GEngine)
@@ -20,6 +20,7 @@ UFrontendUISubsystem* UFrontendUISubsystem::Get(const UObject* WorldContextObjec
 	return nullptr;
 }
 
+// checkpoint to determine if subsystem should be created in the first place
 bool UFrontendUISubsystem::ShouldCreateSubsystem(UObject* Outer) const
 {
 	if (!CastChecked<UGameInstance>(Outer)->IsDedicatedServerInstance())
@@ -33,6 +34,7 @@ bool UFrontendUISubsystem::ShouldCreateSubsystem(UObject* Outer) const
 	return false;
 }
 
+// call our async action to push a widget to the stack and use lambdas for the callback when loaded
 void UFrontendUISubsystem::PushSoftWidgetToStackAsync(const FGameplayTag& InWidgetStack, TSoftClassPtr<UWidget_ActivatableBase> InSoftWidgetClass, TFunction<void(EAsyncPushWidgetState, UWidget_ActivatableBase*)> AsyncPushCallback)
 {
 	check(!InSoftWidgetClass.IsNull());
@@ -52,6 +54,7 @@ void UFrontendUISubsystem::PushSoftWidgetToStackAsync(const FGameplayTag& InWidg
 	}));
 }
 
+// push the confirmation screen with given type on top of the currently active widget and make it modal 
 void UFrontendUISubsystem::PushConfirmScreenToModalStackAsync(EConfirmScreenType InScreenType, const FText& InScreenTitle, const FText& InScreenMessage, TFunction<void(EConfirmScreenButtonType)> ButtonClickedCallback)
 {
 	UConfirmScreenInfoObject* CreatedInfoObject = nullptr;
@@ -84,6 +87,7 @@ void UFrontendUISubsystem::PushConfirmScreenToModalStackAsync(EConfirmScreenType
 	});
 }
 
+// register the primary layout widget that's used as underlying foundation (it's not the Widget template for the layout!)
 void UFrontendUISubsystem::RegisterPrimaryLayoutWidget(UWidget_PrimaryLayout* InCreatedWidget)
 {
 	check(InCreatedWidget);

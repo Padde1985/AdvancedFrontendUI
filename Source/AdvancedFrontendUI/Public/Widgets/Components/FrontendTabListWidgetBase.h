@@ -6,6 +6,7 @@
 
 class UFrontendCommonButtonBase;
 
+// tab class for the options menu headers
 UCLASS(Abstract, BlueprintType, meta=(DisableNativeTick), PrioritizeCategories=("Frontend Tab List Settings"))
 class ADVANCEDFRONTENDUI_API UFrontendTabListWidgetBase : public UCommonTabListWidgetBase
 {
